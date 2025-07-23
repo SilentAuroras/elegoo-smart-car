@@ -9,16 +9,16 @@
 #define collision_distance 50
 float distance, duration;
 
-// Create servo head object
+// Create a servo head object
 Servo servo_head;
 
 /* ----------------------------------------------------
-    Function: setupservo
+    Function: setup_servo
     Description: Attach servo for UltraSonic
     Input: none
     Return: none
 ------------------------------------------------------*/
-void setupservo()
+void setup_servo()
 {
   servo_head.attach(pin_servo_head);    // 1 - Servo for UltraSonic 
 }
@@ -50,13 +50,13 @@ int read_distance_Ultrasonic()
 
 /* ----------------------------------------------------
     Function: checkDirection
-    Description: Check if specified direction is clear
-    Input: Direection to check
+    Description: Check if a specified direction is clear
+    Input: Direction to check
     Return: Direction clear status as bool
 ------------------------------------------------------*/
 bool checkDirection(MotionControlDirections direction)
 {
-  // Check specified direction
+  // Check a specified direction
   servoHeadMove(direction);
   int sensor_distance = read_distance_Ultrasonic();
   delay(100);
@@ -82,7 +82,7 @@ MotionControlDirections clearDirection()
 { 
   // Initialize - neither clear
   bool clear_left = false;
-  bool clear_foward = false;
+  const bool clear_forward = false;
   bool clear_right = false;
   delay(100);
 
@@ -93,8 +93,8 @@ MotionControlDirections clearDirection()
   // Reset head to point forward
   servoHeadMove(Forward);
 
-  // Handle direction change, default tturn to the left
-  if (clear_left && clear_right && clear_foward)
+  // Handle direction change, default turn to the left
+  if (clear_left && clear_right && clear_forward)
   {
     return Forward;
   }

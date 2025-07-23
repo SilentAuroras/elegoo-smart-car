@@ -86,7 +86,7 @@ void MoveMotors(enum MotionControlDirections dir)
       case Left:
       {
         // Turn for x seconds
-        while (1)
+        while (true)
         {
             // Left Bank
             digitalWrite(pin_motor_bin, HIGH);
@@ -102,7 +102,7 @@ void MoveMotors(enum MotionControlDirections dir)
             MoveMotors(Stop);
             break;
           }
-          // Save currentMillis for next loop
+          // Save currentMillis for the next loop
           currentMillis = millis();
         }
         break;
@@ -110,7 +110,7 @@ void MoveMotors(enum MotionControlDirections dir)
       case Right:
       {
         // Turn for x seconds
-        while (1)
+        while (true)
         {
             // Left Bank
             digitalWrite(pin_motor_bin, LOW);
@@ -126,7 +126,7 @@ void MoveMotors(enum MotionControlDirections dir)
             MoveMotors(Stop);
             break;
           }
-          // Save currentMillis for next loop
+          // Save currentMillis for the next loop
           currentMillis = millis();
         }
         break;

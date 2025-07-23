@@ -26,7 +26,7 @@ void setup()
     digitalWrite(pin_enable_motor_control, HIGH);
 
     // Enable servo for ultrasonic sensor
-    setupservo();
+    setup_servo();
 
     // Pause when start up
     delay(2000);
@@ -57,7 +57,7 @@ void loop()
     }
     else
     {
-        // No object detected, keep moving foward
+        // No object detected, keep moving forward
         MoveMotors(Forward);
     }
     delay(100);

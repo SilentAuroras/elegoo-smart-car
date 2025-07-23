@@ -18,7 +18,7 @@
 /* ----------------------------------------------------
     Function prototypes
 ------------------------------------------------------*/
-void setupservo();
+void setup_servo();
 int read_distance_Ultrasonic();
 bool checkDirection(enum MotionControlDirections direction);
 MotionControlDirections clearDirection();
