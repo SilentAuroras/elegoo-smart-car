@@ -43,16 +43,16 @@ void loop()
     // Check current distance in front of Ultrasonic sensor
     float current_distance = read_distance_Ultrasonic();
 
-    // Detect object directly in front
+    // Detect an object directly in front
     if (current_distance <= collision_distance)
     {
         // Object detected, send stop action
         MoveMotors(Stop);
 
-        // Check clear direction
+        // Check a clear direction
         MotionControlDirections clear_direction = clearDirection();
 
-        // Move clear direction
+        // Move in a clear direction
         MoveMotors(clear_direction);
     }
     else

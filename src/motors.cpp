@@ -120,7 +120,7 @@ void MoveMotors(enum MotionControlDirections dir)
             digitalWrite(pin_motor_ain, HIGH);
             analogWrite(pin_motor_ain2_pwm, motor_max_speed/2);
 
-          // When timer runs out, stop motors and exit
+          // When the timer runs out, stop motors and exit
           if ((currentMillis - startMillis >= period_90_deg) && currentMillis != startMillis)
           {
             MoveMotors(Stop);
