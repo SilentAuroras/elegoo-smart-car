@@ -1,8 +1,5 @@
-#include <Arduino.h>
+#pragma once
 #include <Servo.h>
-
-#ifndef Motors_h
-#define Motors_h
 
 /* ----------------------------------------------------
     Define PINs for Elegoo SmartCar Shield v1.1
@@ -25,7 +22,7 @@ extern Servo servo_head;
 enum MotionControlDirections
 {
     Forward = 0,
-    Backward = 1,
+    Backwards = 1,
     Left = 2,
     Right = 3,
     Stop = 4
@@ -36,5 +33,3 @@ enum MotionControlDirections
 ------------------------------------------------------*/
 void servoHeadMove(enum MotionControlDirections check);
 void MoveMotors(enum MotionControlDirections dir);
-
-#endif

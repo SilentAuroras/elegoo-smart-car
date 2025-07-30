@@ -1,10 +1,10 @@
 #include "ultrasonic.h"
 #include "motors.h"
+#include "Arduino.h"
 
 /* ----------------------------------------------------
     Variable Declarations
 ------------------------------------------------------*/
-
 // 2 - UltraSonic: GND, 5V, Pin12, Pin13
 #define collision_distance 50
 float distance, duration;
@@ -66,10 +66,7 @@ bool checkDirection(MotionControlDirections direction)
   {
     return true;
   }
-  else
-  {
-    return false;
-  }
+  return false;
 }
 
 /* ----------------------------------------------------
@@ -80,34 +77,34 @@ bool checkDirection(MotionControlDirections direction)
 ------------------------------------------------------*/
 MotionControlDirections clearDirection()
 { 
-  // Initialize - neither clear
+  // Initialize - nothing clear
   bool clear_left = false;
-  const bool clear_forward = false;
+  bool clear_forward = false;
   bool clear_right = false;
   delay(100);
 
   // Check left and right
   clear_left = checkDirection(Left);
+  delay(1000);
   clear_right = checkDirection(Right);
+  delay(1000);
 
   // Reset head to point forward
   servoHeadMove(Forward);
+  clear_forward = checkDirection(Forward);
 
-  // Handle direction change, default turn to the left
-  if (clear_left && clear_right && clear_forward)
-  {
-    return Forward;
-  }
-  else if (clear_left && !clear_right)
-  {
-    return Left;
-  }
-  else if (!clear_left && clear_right)
-  {
-    return Right;
-  }
-  else
-  {
-    return Stop;
-  }
+    // Handle direction change, default turn to the left
+    if (clear_forward && clear_right && clear_left) {
+        return Forward;
+    }
+    else if (clear_left) {
+        return Left;
+    }
+    else if (clear_right) {
+        return Right;
+    }
+    else {
+        return Backwards;
+    }
+
 }

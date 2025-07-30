@@ -1,8 +1,12 @@
 #include "motors.h"
+#include "Arduino.h"
 
 /* ----------------------------------------------------
     Variable Declarations
 ------------------------------------------------------*/
+
+// Debug flag
+extern bool DEBUG;
 
 // 1 - Servo for UltraSonic: GND, 5V, Pin10
 short pos = 0;
@@ -64,23 +68,28 @@ void MoveMotors(enum MotionControlDirections dir)
   startMillis = millis();
   currentMillis = millis();
 
-  #ifndef DEBUG
+  if (!DEBUG) {
     // Switch based on direction
     switch (dir) {
       case Forward:
       {
-          // Left Bank
-          digitalWrite(pin_motor_bin, HIGH);
-          analogWrite(pin_motor_bin2_pwm, motor_max_speed*LEFT_OFFSET);
+        // Left Bank
+        digitalWrite(pin_motor_bin, HIGH);
+        analogWrite(pin_motor_bin2_pwm, motor_max_speed*LEFT_OFFSET);
 
-          // Right Bank
-          digitalWrite(pin_motor_ain, HIGH);
-          analogWrite(pin_motor_ain2_pwm, motor_max_speed);
-          break;
+        // Right Bank
+        digitalWrite(pin_motor_ain, HIGH);
+        analogWrite(pin_motor_ain2_pwm, motor_max_speed);
+        break;
       }
-      case Backward:
+      case Backwards:
       {
-        // Todo
+        // Stop, turn left 90 degrees, then stop again before moving forward
+        // Recursive call, but seems to work
+        MoveMotors(Stop);
+        MoveMotors(Left);
+        MoveMotors(Left);
+        MoveMotors(Stop);
         break;
       }
       case Left:
@@ -88,13 +97,13 @@ void MoveMotors(enum MotionControlDirections dir)
         // Turn for x seconds
         while (true)
         {
-            // Left Bank
-            digitalWrite(pin_motor_bin, HIGH);
-            analogWrite(pin_motor_bin2_pwm, motor_max_speed/2);
-            
-            // Right bank
-            digitalWrite(pin_motor_ain, LOW);
-            analogWrite(pin_motor_ain2_pwm, motor_max_speed/2);
+          // Left Bank
+          digitalWrite(pin_motor_bin, HIGH);
+          analogWrite(pin_motor_bin2_pwm, motor_max_speed/2);
+
+          // Right bank
+          digitalWrite(pin_motor_ain, LOW);
+          analogWrite(pin_motor_ain2_pwm, motor_max_speed/2);
 
           // When timer runs out, stop motors and exit
           if ((currentMillis - startMillis >= period_90_deg) && currentMillis != startMillis)
@@ -112,13 +121,13 @@ void MoveMotors(enum MotionControlDirections dir)
         // Turn for x seconds
         while (true)
         {
-            // Left Bank
-            digitalWrite(pin_motor_bin, LOW);
-            analogWrite(pin_motor_bin2_pwm, motor_max_speed/2);
-            
-            // Right bank
-            digitalWrite(pin_motor_ain, HIGH);
-            analogWrite(pin_motor_ain2_pwm, motor_max_speed/2);
+          // Left Bank
+          digitalWrite(pin_motor_bin, LOW);
+          analogWrite(pin_motor_bin2_pwm, motor_max_speed/2);
+
+          // Right bank
+          digitalWrite(pin_motor_ain, HIGH);
+          analogWrite(pin_motor_ain2_pwm, motor_max_speed/2);
 
           // When the timer runs out, stop motors and exit
           if ((currentMillis - startMillis >= period_90_deg) && currentMillis != startMillis)
@@ -133,15 +142,15 @@ void MoveMotors(enum MotionControlDirections dir)
       }
       case Stop:
       {
-          // Left Bank
-          digitalWrite(pin_motor_bin, LOW);
-          analogWrite(pin_motor_bin2_pwm, 0);
-          
-          // Right bank
-          digitalWrite(pin_motor_ain, LOW);
-          analogWrite(pin_motor_ain2_pwm, 0);
+        // Left Bank
+        digitalWrite(pin_motor_bin, LOW);
+        analogWrite(pin_motor_bin2_pwm, 0);
+
+        // Right bank
+        digitalWrite(pin_motor_ain, LOW);
+        analogWrite(pin_motor_ain2_pwm, 0);
         break;
       }
     }
-  #endif
+  }
 }

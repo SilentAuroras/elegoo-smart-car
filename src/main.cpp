@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include "motors.h"
+#include "power.h"
 #include "ultrasonic.h"
 
-// #define DEBUG    // Enable debugging and don't move motors
+float battery_voltage;
+bool DEBUG = false;
 
 /* ----------------------------------------------------
     Function: Setup
@@ -22,6 +24,9 @@ void setup()
     pinMode(pin_motor_bin2_pwm, OUTPUT);       // 4 - Motors right bank pwm
     pinMode(pin_motor_bin, OUTPUT);            // 4 - Motors right bank
 
+    // Pull initial battery voltage to detect if just running on USB power for debugging
+    battery_voltage = batteryVoltage();
+
     // Enable motor control chip
     digitalWrite(pin_enable_motor_control, HIGH);
 
@@ -40,8 +45,17 @@ void setup()
 ------------------------------------------------------*/
 void loop()
 {
+    // Check if car is on battery power or USB power (5V), pulled in setup()
+    constexpr float usb_threshold = 5.0;
+
+    if (battery_voltage < usb_threshold) {
+        // Just run shake once, voltage check does not work in setup()
+        noPowerShake();     // Shake servo head if no power
+        DEBUG = true;       // Plugged into USB power, set debug mode, don't move motors
+    }
+
     // Check current distance in front of Ultrasonic sensor
-    float current_distance = read_distance_Ultrasonic();
+    const float current_distance = read_distance_Ultrasonic();
 
     // Detect an object directly in front
     if (current_distance <= collision_distance)
